@@ -7,6 +7,13 @@ pipeline {
               sh "mvn clean package -DskipTests=true"
               archive 'target/*.jar' 
             }
-        }   
+      }
+
+      stage('Test Stage') {
+            steps {
+              sh "mvn test"
+            }
+      }  
+
     }
 }
