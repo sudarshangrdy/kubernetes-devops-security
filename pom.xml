@@ -45,6 +45,7 @@
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
 			</plugin>
+			<!-- Unit Test Code Coverage -->
 			<plugin>
 				<groupId>org.jacoco</groupId>
 				<artifactId>jacoco-maven-plugin</artifactId>
@@ -63,6 +64,26 @@
 						</goals>
 					</execution>
 				</executions>
+			</plugin>
+			<!-- PIT Mutation Test -->
+			<plugin>
+				<groupId>org.pitest</groupId>
+				<artifactId>pitest-maven</artifactId>
+				<version>1.9.5</version>
+				<dependencies>
+					<dependency>
+						<groupId>org.pitest</groupId>
+						<artifactId>pitest-junit5-plugin</artifactId>
+						<version>1.0.0</version>
+					</dependency>
+				</dependencies>
+				<configuration>
+					<mutationThreshold>70</mutationThreshold>
+					<outputFormats>
+						<outputFormat>XML</outputFormat>
+						<outputFormat>HTML</outputFormat>
+					</outputFormats>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>
