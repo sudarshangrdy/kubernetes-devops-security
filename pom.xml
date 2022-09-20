@@ -80,8 +80,8 @@
 				<configuration>
 					<mutationThreshold>70</mutationThreshold>
 					<outputFormats>
-						<outputFormat>XML</outputFormat>
-						<outputFormat>HTML</outputFormat>
+						<param>XML</param>
+						<param>HTML</param>
 					</outputFormats>
 				</configuration>
 			</plugin>

@@ -1,6 +1,5 @@
 package com.devsecops;
 
-
 import org.junit.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -34,9 +33,19 @@ public class NumericApplicationTests {
     @Autowired
     private MockMvc mockMvc;
 
+    // Modified for handling Mutation Test
+    /*
+     * @Test
+     * public void smallerThanOrEqualToFiftyMessage() throws Exception {
+     * this.mockMvc.perform(get("/compare/49")).andDo(print()).andExpect(status().
+     * isOk())
+     * .andExpect(content().string("Smaller than or equal to 50"));
+     * }
+     */
+
     @Test
     public void smallerThanOrEqualToFiftyMessage() throws Exception {
-        this.mockMvc.perform(get("/compare/49")).andDo(print()).andExpect(status().isOk())
+        this.mockMvc.perform(get("/compare/50")).andDo(print()).andExpect(status().isOk())
                 .andExpect(content().string("Smaller than or equal to 50"));
     }
 
@@ -45,11 +54,20 @@ public class NumericApplicationTests {
         this.mockMvc.perform(get("/compare/51")).andDo(print()).andExpect(status().isOk())
                 .andExpect(content().string("Greater than 50"));
     }
-    
+
+    // Modified for handling Mutation Test
+    /*
+     * @Test
+     * public void welcomeMessage() throws Exception {
+     * this.mockMvc.perform(get("/")).andDo(print()).andExpect(status().isOk());
+     * }
+     */
+
     @Test
     public void welcomeMessage() throws Exception {
-         this.mockMvc.perform(get("/")).andDo(print()).andExpect(status().isOk());
+        this.mockMvc.perform(get("/")).andDo(print()).andExpect(status().isOk())
+                .andExpect(content().string("Kubernetes DevSecOps"));
+
     }
-    
 
 }
