@@ -23,10 +23,11 @@ pipeline {
 
       stage('Docker Build and Push') {
 	      steps {
-          docker.withRegistry('', 'docker-hub') {
-            def newApp = docker.build "iamharryindoc/numeric-app:${env.GIT_COMMIT}"
-            newApp.push()
-          }
+          withDockerRegistry([credentialsId: "docker-hub", url: ""]) {
+            sh 'printenv'
+            sh 'docker build -t iamharryindoc/numeric-app:""$GIT_COMMIT"" .'
+            sh 'docker push iamharryindoc/numeric-app:""$GIT_COMMIT""'
+		      }
 	      }
       }  
 
