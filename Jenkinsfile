@@ -112,24 +112,26 @@ pipeline {
 		  //    }
 	    //  }
       //}
+
+       stage('K8s Deployment - DEV') {
+          steps {
+            withKubeConfig([credentialsId: "kubernetescrd"]) {
+              sh "bash k8s-deployment.sh"
+            }
+          }
+        }
+
+        stage('K8s check deployment status - DEV') {
+          steps {
+            withKubeConfig([credentialsId: "kubernetescrd"]) {
+              sh "bash k8s-deployment-rollout-status.sh"
+            }
+          }
+        }
     }
 
-    stage('K8s Deployment - DEV') {
-      steps {
-        withKubeConfig([credentialsId: "kubernetescrd"]) {
-          sh "bash k8s-deployment.sh"
-        }
-      }
-    }
+   
 
-    stage('K8s check deployment status - DEV') {
-      steps {
-        withKubeConfig([credentialsId: "kubernetescrd"]) {
-          sh "bash k8s-deployment-rollout-status.sh"
-        }
-      }
-    }
-    
     post {
         always {
           junit 'target/surefire-reports/*.xml'
