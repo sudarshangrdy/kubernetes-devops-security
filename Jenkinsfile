@@ -25,6 +25,7 @@ pipeline {
         steps {
           sh 'mvn org.pitest:pitest-maven:mutationCoverage'
         }
+        //As below plugin not working properly
         //post {
         //  always {
         //    pitmutation mutationStatsFile: '**/target/pit-reports/**/mutations.xml'
@@ -46,6 +47,17 @@ pipeline {
           }
         }
       }
+
+      stage('Dependency Scan - Check') {
+				steps {
+					sh "mvn dependency-check:check"
+				}
+				post {
+					always {
+						dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
+					}
+				}
+			}
 
       stage('Docker Build and Push') {
 	      steps {
