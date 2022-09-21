@@ -13,11 +13,12 @@ pipeline {
             steps {
               sh "mvn test"
             }
-            post {
-				      always {
-					      junit 'target/surefire-reports/*.xml'
-					      jacoco execPattern: 'target/jacoco.exec'
-				      }
+            //Placed at the bottom
+            //post {
+				    //  always {
+					  //    junit 'target/surefire-reports/*.xml'
+					  //    jacoco execPattern: 'target/jacoco.exec'
+				    //  }
 			      }
       }
 
@@ -25,7 +26,7 @@ pipeline {
         steps {
           sh 'mvn org.pitest:pitest-maven:mutationCoverage'
         }
-        //As below plugin not working properly
+        //As below plugin not working properly, also placed at the bottom
         //post {
         //  always {
         //    pitmutation mutationStatsFile: '**/target/pit-reports/**/mutations.xml'
@@ -48,14 +49,16 @@ pipeline {
         }
       }
 
+      //Merging two stages using parallel
       stage('Dependency Scan - Check') {
 				steps {
 					sh "mvn dependency-check:check"
 				}
-				post {
-					always {
-						dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
-					}
+        //Placed at the bottom
+				//post {
+				//	always {
+				//		dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
+				//	}
 				}
 			}
 
@@ -76,6 +79,15 @@ pipeline {
 			      sh 'kubectl apply -f k8s_deployment_service.yaml'
 		      }
 	      }
+      }
+
+      post {
+        always {
+          junit 'target/surefire-reports/*.xml'
+					jacoco execPattern: 'target/jacoco.exec'
+          pitmutation mutationStatsFile: '**/target/pit-reports/**/mutations.xml'
+          dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
+        }
       }  
 
     }
