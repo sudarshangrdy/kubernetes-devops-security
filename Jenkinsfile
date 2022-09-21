@@ -19,7 +19,7 @@ pipeline {
 					  //    junit 'target/surefire-reports/*.xml'
 					  //    jacoco execPattern: 'target/jacoco.exec'
 				    //  }
-			      }
+			      //}
       }
 
       stage('Mutation test - PIT') {
@@ -59,7 +59,7 @@ pipeline {
 				//	always {
 				//		dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
 				//	}
-				}
+        //    }
 			}
 
       stage('Docker Build and Push') {
