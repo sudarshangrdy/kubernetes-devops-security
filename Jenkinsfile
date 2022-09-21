@@ -88,6 +88,12 @@ pipeline {
 	      }
       }
 
+      stage('Vulnerability Scan - Kubernetes') {
+	      steps {
+		      sh "docker run --rm -v $WORKSPACE:/project openpolicyagent/conftest test --policy op-security-k8s.rego k8s_deployment_service.yaml"
+	      }
+      }
+
       stage('Kubernetes Deployment - DEV') {
 	      steps {
 		      withKubeConfig([credentialsId: "kubernetescrd"]) {
