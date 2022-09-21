@@ -34,7 +34,7 @@ pipeline {
 
       stage('SonarQube Analysis') {
         steps {
-          withSonarQubeEnv() {
+          withSonarQubeEnv('JenSonarqube') {
             sh "mvn clean verify sonar:sonar -Dsonar.projectKey=devsecops-app"
           }
         }
