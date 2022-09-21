@@ -50,16 +50,29 @@ pipeline {
       }
 
       //Merging two stages using parallel
-      stage('Dependency Scan - Check') {
-				steps {
-					sh "mvn dependency-check:check"
-				}
+      //stage('Dependency Scan - Check') {
+			//	steps {
+			//		sh "mvn dependency-check:check"
+			//	}
         //Placed at the bottom
 				//post {
 				//	always {
 				//		dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
 				//	}
         //    }
+			//}
+
+      stage('Dependency Scan - Trivy Check') {
+				steps {
+					parallel(
+					  "Dependency Scan" : {
+						  sh "mvn dependency-check:check"
+					  },
+					  "Trivy Scan": {
+						  sh "bash trivy-docker-image-scan.sh"
+					  }
+					) 
+				}
 			}
 
       stage('Docker Build and Push') {
