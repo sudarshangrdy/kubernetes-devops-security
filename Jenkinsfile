@@ -1,6 +1,15 @@
 pipeline {
   agent any
 
+  environment {
+    deploymentName = "devsecops"
+    containerName = "devsecops-container"
+    serviceName = "devsecops-svc"
+    imageName = "iamharryindoc/numeric-app:$GIT_COMMIT"
+    applicationURL="http://devsecops-demo.eastus.cloudapp.azure.com/"
+    applicationUTI="/increment/99"
+  }
+
   stages {
       stage('Build Artifact') {
             steps {
@@ -94,16 +103,33 @@ pipeline {
 	      }
       }
 
-      stage('Kubernetes Deployment - DEV') {
-	      steps {
-		      withKubeConfig([credentialsId: "kubernetescrd"]) {
-			      sh "sed -i 's#replace#iamharryindoc/numeric-app:${GIT_COMMIT}#g' k8s_deployment_service.yaml"
-			      sh 'kubectl apply -f k8s_deployment_service.yaml'
-		      }
-	      }
+       //Placing this stage in two stages for handling rollback 
+      //stage('Kubernetes Deployment - DEV') {
+	    //  steps {
+		  //    withKubeConfig([credentialsId: "kubernetescrd"]) {
+			//      sh "sed -i 's#replace#iamharryindoc/numeric-app:${GIT_COMMIT}#g' k8s_deployment_service.yaml"
+			//      sh 'kubectl apply -f k8s_deployment_service.yaml'
+		  //    }
+	    //  }
+      //}
+    }
+
+    stage('K8s Deployment - DEV') {
+      steps {
+        withKubeConfig([credentialsId: "kubernetescrd"]) {
+          sh "bash k8s-deployment.sh"
+        }
       }
     }
 
+    stage('K8s check deployment status - DEV') {
+      steps {
+        withKubeConfig([credentialsId: "kubernetescrd"]) {
+          sh "bash k8s-deployment-rollout-status.sh"
+        }
+      }
+    }
+    
     post {
         always {
           junit 'target/surefire-reports/*.xml'
