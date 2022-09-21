@@ -76,11 +76,11 @@ pipeline {
 			}
 
       stage('Docker Build and Push') {
-	      steps {
+	      steps {//added sudo only trivy
           withDockerRegistry([credentialsId: "docker-hub", url: ""]) {
             sh 'printenv'
-            sh 'docker build -t iamharryindoc/numeric-app:""$GIT_COMMIT"" .'
-            sh 'docker push iamharryindoc/numeric-app:""$GIT_COMMIT""'
+            sh 'sudo docker build -t iamharryindoc/numeric-app:""$GIT_COMMIT"" .'
+            sh 'sudo docker push iamharryindoc/numeric-app:""$GIT_COMMIT""'
 		      }
 	      }
       }
