@@ -10,9 +10,9 @@ scan_result=$(docker run -i kubesec/kubesec:512c5e0 scan /dev/stdin < k8s_deploy
 scan_message=$(docker run -i kubesec/kubesec:512c5e0 scan /dev/stdin < k8s_deployment_service.yaml | jq .[].message -r )
 scan_score=$(docker run -i kubesec/kubesec:512c5e0 scan /dev/stdin < k8s_deployment_service.yaml | jq .[].score )
 
-echo "${scan_score} is"
+echo "$scan_score is"
 
-if [[ ${scan_score} -ge 5 ]];
+if [[ "${scan_score}" -ge 5 ]];
 then
     echo "Score is $scan_score"
     echo "Kubesec Scan $scan_message"
