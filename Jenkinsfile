@@ -145,6 +145,23 @@ pipeline {
             }
           }
         }
+
+        stage('Integration Tests - Dev') {
+	        steps {
+		        script {
+			        try {
+				        withKubeConfig([credentialsId: "kubernetescrd"]) {
+					      sh "bash integration-test.sh"
+				        }
+			        } catch(e) {
+			        	withKubeConfig([credentialsId: "kubernetescrd"]) {
+					      sh "kubectl -n default rollout undo deploy ${deploymentName}"
+				        }
+				        throw e
+			        }
+		        }
+	        }
+        }
     }
 
    
