@@ -6,7 +6,7 @@ pipeline {
     containerName = "devsecops-container"
     serviceName = "devsecops-svc"
     imageName = "iamharryindoc/numeric-app:$GIT_COMMIT"
-    applicationURL="http://ec2-44-203-237-108.compute-1.amazonaws.com"
+    applicationURL="http://ec2-34-205-191-249.compute-1.amazonaws.com"
     applicationURI="/increment/99"
   }
 
