@@ -172,6 +172,15 @@ pipeline {
 		        }
 	        }
         }
+
+        stage('Prompt to Prod') {
+          steps {
+            timeout(time: 2, unit: 'DAYS') {
+              input 'Do you want to approve the Deployment to Production Environment/Namespace?'
+            }
+          }
+        }
+
     }
 
    
