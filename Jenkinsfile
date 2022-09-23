@@ -162,6 +162,14 @@ pipeline {
 		        }
 	        }
         }
+
+        stage('OWASP ZAP -- DAST') {
+	        steps {
+		        withKubeConfig([credentialsId: "kubernetescrd"]) {
+			        sh 'bash zap.sh'
+		        }
+	        }
+        }
     }
 
    
