@@ -8,7 +8,7 @@ pipeline {
     containerName = "devsecops-container"
     serviceName = "devsecops-svc"
     imageName = "iamharryindoc/numeric-app:$GIT_COMMIT"
-    applicationURL="http://ec2-44-203-249-57.compute-1.amazonaws.com"
+    applicationURL="http://ec2-44-192-125-48.compute-1.amazonaws.com"
     applicationURI="/increment/99"
   }
 
@@ -197,7 +197,27 @@ pipeline {
               )
             }
           }
-}
+        }
+
+        stage('K8s Deployment - Prod') {
+	        steps {
+		        parallel(
+              "Deployment" : {
+                 withKubeConfig([credentialsId: "kubernetescrd"]) {
+			            sh "sed -i 's#replace#${imageName}#g' k8s_PROD-deployment_service.yaml"
+			            sh 'kubectl -n prod apply -f k8s_PROD-deployment_service.yaml'
+		            }
+              },
+             "RolloutStatus" : {
+                  withKubeConfig([credentialsId: "kubernetescrd"]) {
+					          sh "bash k8s_PROD-deployment_rollout-status.sh"
+				          }
+             }
+            )
+	        }
+        }
+
+
 
     }
 
