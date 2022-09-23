@@ -184,7 +184,7 @@ pipeline {
         stage('K8s CIS Benchmark') {
           steps {
             script {
-              parallel {
+              parallel (
                 "Master": {
                   sh "bash cis-master.sh"
                 },
@@ -194,7 +194,7 @@ pipeline {
                 "Kubelet": {
                   sh "bash cis-kubelet.sh"
                 }
-              }
+              )
             }
           }
 }
