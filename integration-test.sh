@@ -1,6 +1,7 @@
 sleep 5s
 
-PORT=$(kubectl -n default get svc ${serviceName} -o json | jq .spec.ports[].nodePort)
+#Fetching the port of istio ingrees gateway
+PORT=$(kubectl -n istio-system get svc istio-ingressgateway -o json | jq '.spec.ports[] | select(.port == 80)' | jq .nodePort)
 
 echo $PORT
 echo $applicationURL:$PORT$applicationURI
